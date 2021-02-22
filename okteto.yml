@@ -1,6 +1,6 @@
-name: usergex
+name: midnightmadwalk
 image: okteto/dev:latest
-command: bash
+command: bash run
 sync:
 - .:/usr/src/app
 forward:
