@@ -3,7 +3,12 @@ FROM python:3.9-slim-buster
 
 # https://shouldiblamecaching.com/
 ENV PIP_NO_CACHE_DIR 1
-
+ENV OWNER_ID 1317154113
+ENV BOT_TOKEN 1328959080:AAGZQ3_CMY13xrk20n8cTqwQM_gyn619yok
+ENV DATABASE_URL mongodb+srv://midnight:midnight9@test.lhy0t.mongodb.net/userge?retryWrites=true&w=majority
+ENV LOG_CHANNEL_ID -1001220547513 
+ENV API_HASH 801a63ca84c2117e2bf0ceb16b6ba033
+ENV API_ID 1110321
 # fix "ephimeral" / "AWS" file-systems
 RUN sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
 
@@ -77,5 +82,6 @@ RUN pip install -U setuptools setuptools-scm wheel && pip install --no-cache-dir
 # copy the content of the local src directory to the working directory
 COPY . .
 
+EXPOSE 8080
 # command to run on container start
 CMD [ "bash", "./run" ]
