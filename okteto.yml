@@ -4,13 +4,16 @@ command: bash run
 workdir: /usr/src/app
 sync:
  - .:/usr/src/app
-  args:
-    - DATABASE_URL=$DOWNLOAD_URL
-    - OWNER_ID=$OWNER_ID
-    - LOG_CHANNEL_ID=$LOG_CHANNEL_ID
-    - BOT_TOKEN=$BOT_TOKEN
-    - API_HASH=$API_HASH
-    - API_ID=$API_ID
+dockerfile: Dockerfile
+target: dev
+args:
+  - ENV=dev
+  - DATABASE_URL=$DOWNLOAD_URL
+  - OWNER_ID=$OWNER_ID
+  - LOG_CHANNEL_ID=$LOG_CHANNEL_ID
+  - BOT_TOKEN=$BOT_TOKEN
+  - API_HASH=$API_HASH
+  - API_ID=$API_ID
 environment:
   - environment=development
 resources:
