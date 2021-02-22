@@ -1,0 +1,13 @@
+name: voting-app
+services:
+  vote:
+    public: true
+    image: 
+    build: vote
+    replicas: 1
+    ports:
+      - 8080
+    resources:
+      limits: 
+      cpu: 1 
+      memory: 3Gi
