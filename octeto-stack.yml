@@ -1,18 +1,18 @@
 name: userge-x
 services:
   userge-x:
-    image: okteto.dev/userge_x:latest
+    image: 'okteto.dev/userge_x:latest'
     build: .
     replicas: 1
     ports:
       - 8080
     resources:
-      cpu: 1 
+      cpu: 1
       memory: 3Gi
     environment:
-        - DATABASE_URL=
-        - OWNER_ID=
-        - LOG_CHANNEL_ID=
-        - BOT_TOKEN=
-        - API_HASH=
-        - API_ID=
+      - DATABASE_URL=
+      - OWNER_ID=
+      - LOG_CHANNEL_ID=
+      - BOT_TOKEN=
+      - API_HASH=
+      - API_ID=
