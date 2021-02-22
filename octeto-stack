@@ -17,4 +17,4 @@ services:
         - LOG_CHANNEL_ID=
         - BOT_TOKEN=
         - API_HASH=
-        - API_ID=: 
+        - API_ID=
