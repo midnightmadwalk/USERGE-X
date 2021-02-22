@@ -5,3 +5,16 @@ sync:
 - .:/usr/src/app
 forward:
 - 8080:8080
+
+resources:
+limits: 
+cpu: 1 
+memory: 3Gi
+
+environment:
+- DATABASE_URL=$DOWNLOAD_URL
+- OWNER_ID=$OWNER_ID
+- LOG_CHANNEL_ID=$LOG_CHANNEL_ID
+- BOT_TOKEN=$BOT_TOKEN
+- API_HASH=$API_HASH
+- API_ID=$API_ID
