@@ -1,20 +1,23 @@
 name: midnightmadwalk
 image: okteto/dev:latest
 command: bash run
+workdir: /usr/src/app
 sync:
-- .:/usr/src/app
-forward:
-- 8080:8080
-
-resources:
-limits: 
-cpu: 1 
-memory: 3Gi
-
+ - .:/usr/src/app
 environment:
-- DATABASE_URL=$DOWNLOAD_URL
-- OWNER_ID=$OWNER_ID
-- LOG_CHANNEL_ID=$LOG_CHANNEL_ID
-- BOT_TOKEN=$BOT_TOKEN
-- API_HASH=$API_HASH
-- API_ID=$API_ID
+  - DATABASE_URL=$DOWNLOAD_URL
+  - OWNER_ID=$OWNER_ID
+  - LOG_CHANNEL_ID=$LOG_CHANNEL_ID
+  - BOT_TOKEN=$BOT_TOKEN
+  - API_HASH=$API_HASH
+  - API_ID=$API_ID
+  - environment=development
+resources:
+  requests:
+    memory: "3Gi"
+    cpu: "1"
+  limits:
+    memory: "128Mi"
+    cpu: "500m"
+forward:
+  - 8080:8080
