@@ -3,7 +3,6 @@ services:
   userge-x:
     public: true
     image: varietyjames1/userge_x:latest
-    build: vote
     replicas: 1
     ports:
       - 8080
