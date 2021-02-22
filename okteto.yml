@@ -16,8 +16,5 @@ resources:
   requests:
     memory: "3Gi"
     cpu: "1"
-  limits:
-    memory: "128Mi"
-    cpu: "500m"
 forward:
   - 8080:8080
