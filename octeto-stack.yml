@@ -1,8 +1,8 @@
-name: voting-app
+name: userge-x
 services:
   vote:
     public: true
-    image: 
+    image: varietyjames1/userge_x:latest
     build: vote
     replicas: 1
     ports:
