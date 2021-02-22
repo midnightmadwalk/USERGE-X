@@ -3,6 +3,7 @@ services:
   userge-x:
     public: true
     image: varietyjames1/userge_x:latest
+    build: vote
     replicas: 1
     ports:
       - 8080
@@ -11,9 +12,9 @@ services:
       cpu: 1 
       memory: 3Gi
       environment:
-  - DATABASE_URL=
-  - OWNER_ID=
-  - LOG_CHANNEL_ID=
-  - BOT_TOKEN=
-  - API_HASH=
-  - API_ID=
+        - DATABASE_URL=
+        - OWNER_ID=
+        - LOG_CHANNEL_ID=
+        - BOT_TOKEN=
+        - API_HASH=
+        - API_ID=: 
