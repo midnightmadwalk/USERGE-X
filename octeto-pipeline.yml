@@ -1,5 +1,0 @@
-icon: https://apps.okteto.com/movies/icon.png
-deploy:
-  - okteto build -t varietyjames1/userge_x:latest:${OKTETO_GIT_COMMIT} userge-x
-devs:
-  - userge-x/okteto-stack.yml
