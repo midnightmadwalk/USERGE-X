@@ -83,5 +83,7 @@ RUN pip install -U setuptools setuptools-scm wheel && pip install --no-cache-dir
 COPY . .
 
 EXPOSE 8080
+
+RUN rm okteto-stack.yml
 # command to run on container start
 CMD [ "bash", "./run" ]
