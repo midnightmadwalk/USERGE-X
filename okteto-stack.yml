@@ -7,7 +7,7 @@ services:
     ports:
       - 8080
     resources:
-      cpu: 3
+      cpu: 2
       memory: 4Gi
     environment:
       - DATABASE_URL=${DATABASE_URL}
