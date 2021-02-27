@@ -23,7 +23,7 @@ RUN apt -qq install -y --no-install-recommends \
     ffmpeg mediainfo \
     neofetch \
     libfreetype6-dev libjpeg-dev libpng-dev libgif-dev libwebp-dev \
-    python3-dev zlib1g-dev
+    zlib1g-dev
     
 RUN rm -rf /var/lib/apt/lists /var/cache/apt/archives /tmp/*
 
