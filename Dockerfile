@@ -20,12 +20,14 @@ WORKDIR /app/
 
 RUN apt -qq update && apt -qq upgrade -y 
 RUN apt -qq install -y --no-install-recommends \
+    sudo \
     apt-utils \
     curl \
     git \
     gnupg2 \
     wget \
-    unzip
+    unzip \
+    
 
 # to resynchronize the package index files from their sources.
 RUN apt -qq update
@@ -37,21 +39,21 @@ ENV LANG C.UTF-8
 
 
 # install chrome
-RUN mkdir -p /tmp/ && \
-    cd /tmp/ && \
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+# RUN mkdir -p /tmp/ && \
+   # cd /tmp/ && \
+   # wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
     # -f ==> is required to --fix-missing-dependancies
-    dpkg -i ./google-chrome-stable_current_amd64.deb; apt -fqqy install && \
+  #  dpkg -i ./google-chrome-stable_current_amd64.deb; apt -fqqy install && \
     # clean up the container "layer", after we are done
-    rm ./google-chrome-stable_current_amd64.deb
+   # rm ./google-chrome-stable_current_amd64.deb
 
 # install chromedriver
-RUN mkdir -p /tmp/ && \
-    cd /tmp/ && \
-    wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip  && \
-    unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ && \
+# RUN mkdir -p /tmp/ && \
+  #  cd /tmp/ && \
+  #  wget -O /tmp/chromedriver.zip http://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip  && \
+  #  unzip /tmp/chromedriver.zip chromedriver -d /usr/bin/ && \
     # clean up the container "layer", after we are done
-    rm /tmp/chromedriver.zip
+  #  rm /tmp/chromedriver.zip
 
 ENV GOOGLE_CHROME_DRIVER /usr/bin/chromedriver
 ENV GOOGLE_CHROME_BIN /usr/bin/google-chrome-stable
