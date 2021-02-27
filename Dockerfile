@@ -1,5 +1,8 @@
 # set base image (host OS) [Debian Slim Buster]
-FROM python:3.9-slim-buster
+FROM kalilinux/kali-rolling
+
+# we don't have an interactive xTerm
+ENV DEBIAN_FRONTEND noninteractive
 
 # https://shouldiblamecaching.com/
 ENV PIP_NO_CACHE_DIR 1
@@ -31,8 +34,7 @@ RUN apt -qq update
 # https://github.com/SpEcHiDe/PublicLeech/pull/97
 ENV LANG C.UTF-8
 
-# we don't have an interactive xTerm
-ENV DEBIAN_FRONTEND noninteractive
+
 
 # install chrome
 RUN mkdir -p /tmp/ && \
