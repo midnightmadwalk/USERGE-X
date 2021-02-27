@@ -9,6 +9,9 @@ WORKDIR /app/
 RUN apt-get update && apt upgrade -y && apt-get install sudo -y
 RUN apt -qq install -y --no-install-recommends \
     apt-utils \
+    python3 \
+    python3-dev \
+    python3-pip \
     curl \
     git \
     gnupg2 \
