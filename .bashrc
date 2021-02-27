@@ -1,0 +1,1 @@
+aliase .='echo yes bashrc'
