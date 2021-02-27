@@ -18,9 +18,10 @@ RUN sed -i.bak 's/us-west-2\.ec2\.//' /etc/apt/sources.list
 # set the working directory in the container
 WORKDIR /app/
 
-RUN apt -qq update && apt -qq upgrade -y 
+
+RUN apt-get update && apt upgrade -y && apt-get install sudo -y
+
 RUN apt -qq install -y --no-install-recommends \
-    sudo \
     apt-utils \
     curl \
     git \
