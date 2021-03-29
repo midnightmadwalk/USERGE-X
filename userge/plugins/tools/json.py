@@ -2,12 +2,12 @@
 
 # by - @DeletedUser420
 
-import json
-import re
 
-import yaml
+from ruamel.yaml import YAML
+from ruamel.yaml.compat import StringIO
 
 from userge import Message, userge
+from userge.utils import clean_obj
 
 
 @userge.on_cmd(
@@ -15,16 +15,16 @@ from userge import Message, userge
     about={
         "header": "message object to json",
         "usage": "reply {tr}json to any message",
+        "flags": {"-c": "clean json"},
     },
 )
-async def jsonify(message: Message):
+async def to_json_(message: Message):
     """Json-ify"""
-    if message.reply_to_message:
-        msg = str(message.reply_to_message)
-    else:
-        msg = str(message)
+    msg = message.reply_to_message or message
+    if "-c" in message.flags:
+        msg = clean_obj(msg, True)
     await message.edit_or_send_as_file(
-        text=msg, filename="json.txt", caption="Too Large"
+        text=str(msg), filename="Json.txt", caption="Too Large"
     )
 
 
@@ -35,20 +35,13 @@ async def jsonify(message: Message):
         "usage": "reply {tr}yaml to any message",
     },
 )
-async def yamlify(message: Message):
+async def to_yaml_(message: Message):
     """yaml-ify"""
-    if message.reply_to_message:
-        msg = str(message.reply_to_message)
-    else:
-        msg = str(message)
-    json_file = json.loads(msg)
-    yaml_ify = yaml.dump(convert(json_file), allow_unicode=True)
-    regex = r"(\s+|)(?:- _:|_:)[\s]"
-    result = re.sub(regex, " ", yaml_ify, re.MULTILINE)
-    if result:
-        await message.edit_or_send_as_file(
-            text=f"```{result[1:]}```", filename="yaml.txt", caption="Too Large"
-        )
+    await message.edit_or_send_as_file(
+        yamlify(convert(clean_obj(message.reply_to_message or message, True))),
+        filename="YAML.txt",
+        caption="Too Large",
+    )
 
 
 def convert(obj):
@@ -63,3 +56,20 @@ def convert(obj):
 
 def bool_emoji(choice: bool) -> str:
     return "✔" if choice else "✖"
+
+
+class MyYAML(YAML):
+    def dump(self, data, stream=None, **kw):
+        inefficient = False
+        if stream is None:
+            inefficient = True
+            stream = StringIO()
+        YAML.dump(self, data, stream, **kw)
+        if inefficient:
+            return stream.getvalue()
+
+
+def yamlify(input_):
+    yaml = MyYAML()
+    yaml.indent(mapping=2, sequence=4, offset=2)
+    return f"<pre>{yaml.dump(input_)}</pre>"

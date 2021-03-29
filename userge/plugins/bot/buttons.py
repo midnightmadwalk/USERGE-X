@@ -3,7 +3,8 @@
 # IMPROVED BY code-rgb
 
 import os
-import re
+from asyncio import gather
+from re import compile as comp_regex
 
 import ujson
 from pyrogram.errors import BadRequest, UserIsBot
@@ -13,7 +14,11 @@ from userge import Config, Message, userge
 from userge.utils import get_file_id
 from userge.utils import parse_buttons as pb
 
-BTN_REGEX = r"\[([^\[]+?)\](\[buttonurl:(?:/{0,2})(.+?)(:same)?\]|\(buttonurl:(?:/{0,2})(.+?)(:same)?\))"
+from .bot_pm import get_bot_info
+
+BTN_REGEX = comp_regex(
+    r"\[([^\[]+?)](\[buttonurl:(?:/{0,2})(.+?)(:same)?]|\(buttonurl:(?:/{0,2})(.+?)(:same)?\))"
+)
 PATH = "./userge/xcache/inline_db.json"
 CHANNEL = userge.getCLogger(__name__)
 
@@ -114,6 +119,7 @@ async def create_button(msg: Message):
         "<code>[name][buttonurl:link:same]</code> - "
         "<b>add a url button to same row</b>",
     },
+    check_downpath=True,
 )
 async def inline_buttons(message: Message):
     await message.edit("<code>Creating an Inline Button...</code>")
@@ -142,24 +148,27 @@ async def inline_buttons(message: Message):
     rnd_id = userge.rnd_id()
     msg_content = check_brackets(msg_content)
     InlineDB.save_msg(rnd_id, msg_content, media_valid, media_id)
-    bot = await userge.bot.get_me()
-    x = await userge.get_inline_bot_results(bot.username, f"btn_{rnd_id}")
-    await userge.send_inline_bot_result(
-        chat_id=message.chat.id,
-        query_id=x.query_id,
-        result_id=x.results[0].id,
+    x = await userge.get_inline_bot_results(
+        (await get_bot_info())["bot"].uname, f"btn_{rnd_id}"
     )
-    await message.delete()
+    await gather(
+        userge.send_inline_bot_result(
+            chat_id=message.chat.id,
+            query_id=x.query_id,
+            result_id=x.results[0].id,
+        ),
+        message.delete(),
+    )
 
 
 def check_brackets(text: str):
-    unmatch = re.sub(BTN_REGEX, "", text)
+    unmatch = BTN_REGEX.sub("", text)
     textx = ""
-    for m in re.finditer(BTN_REGEX, text):
+    for m in BTN_REGEX.finditer(text):
         if m.group(3):
             textx += m.group(0)
         elif m.group(5):
-            textx += f"[{m.group(1)}][buttonurl:{m.group(5)}]"
+            textx += f"[{m.group(1)}][buttonurl:{m.group(5)}{m.group(6) or ''}]"
     return unmatch + textx
 
 
@@ -204,13 +213,15 @@ async def noformat_message(message: Message):
                         buttons += f"[{btn.text}]{lbr_}buttonurl:{btn.url}:same{rbr_}"
 
     if media:
-        await message.delete()
-        await message.client.send_cached_media(
-            chat_id=message.chat.id,
-            file_id=media,
-            caption=f"{msg_text}{buttons}",
-            reply_to_message_id=reply.message_id,
-            parse_mode=None,
+        await gather(
+            message.delete(),
+            message.client.send_cached_media(
+                chat_id=message.chat.id,
+                file_id=media,
+                caption=f"{msg_text}{buttons}",
+                reply_to_message_id=reply.message_id,
+                parse_mode=None,
+            ),
         )
     else:
         await message.edit(f"{msg_text}{buttons}", parse_mode=None)

@@ -4,7 +4,6 @@ import asyncio
 import os
 import time
 
-from emoji import get_emoji_regexp
 from pyrogram.errors import (
     FloodWait,
     PeerIdInvalid,
@@ -15,6 +14,7 @@ from pyrogram.errors import (
 from pyrogram.types import ChatPermissions
 
 from userge import Message, userge
+from userge.utils.functions import get_emoji_regex
 
 CHANNEL = userge.getCLogger(__name__)
 
@@ -47,7 +47,7 @@ async def promote_usr(message: Message):
         )
         return
     if custom_rank:
-        custom_rank = get_emoji_regexp().sub("", custom_rank)
+        custom_rank = get_emoji_regex().sub("", custom_rank)
         if len(custom_rank) > 15:
             custom_rank = custom_rank[:15]
     try:
@@ -469,12 +469,16 @@ async def unmute_usr(message: Message):
 async def zombie_clean(message: Message):
     """ remove deleted accounts from tg group """
     chat_id = message.chat.id
-    check_user = await message.client.get_chat_member(
-        message.chat.id, message.from_user.id
-    )
     flags = message.flags
     rm_delaccs = "-c" in flags
-    can_clean = check_user.status in ("administrator", "creator")
+    can_clean = bool(
+        not message.from_user
+        or message.from_user
+        and (
+            await message.client.get_chat_member(message.chat.id, message.from_user.id)
+        ).status
+        in ("administrator", "creator")
+    )
     if rm_delaccs:
         del_users = 0
         del_admins = 0

@@ -12,9 +12,9 @@ import io
 import os
 import random
 
-import emoji
 from bs4 import BeautifulSoup as bs
 from PIL import Image
+from pyrogram import emoji
 from pyrogram.errors import StickersetInvalid, YouBlockedUser
 from pyrogram.raw.functions.messages import GetStickerSet
 from pyrogram.raw.types import InputStickerSetShortName
@@ -84,14 +84,16 @@ async def kang_(message: Message):
             else:
                 emoji_ = args[0]
 
-        if emoji_ and emoji_ not in emoji.UNICODE_EMOJI:
+        if emoji_ and emoji_ not in (
+            getattr(emoji, _) for _ in dir(emoji) if not _.startswith("_")
+        ):
             emoji_ = None
         if not emoji_:
             emoji_ = "🤔"
 
         u_name = user.username
         u_name = "@" + u_name if u_name else user.first_name or user.id
-        packname = f"a{user.id}_by_userge_{pack}"
+        packname = f"a{user.id}_by_x_{pack}"
         custom_packnick = Config.CUSTOM_PACK_NAME or f"{u_name}'s kang pack"
         packnick = f"{custom_packnick} Vol.{pack}"
         cmd = "/newpack"

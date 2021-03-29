@@ -17,6 +17,8 @@ _EMOJI_REGEXP = None
 
 # For Downloading & Checking Media then Converting to Image.
 # RETURNS an "Image".
+
+
 async def media_to_image(message):
     replied = message.reply_to_message
     if not (
@@ -149,7 +151,7 @@ def check_owner(func):
             try:
                 await func(c_q)
             except FloodWait as e:
-                await asyncio.sleep(e.x + 3)
+                await asyncio.sleep(e.x + 5)
             except MessageNotModified:
                 pass
         else:
@@ -159,3 +161,12 @@ def check_owner(func):
             )
 
     return wrapper
+
+
+# Make dict keys attribute
+class AttributeDict(dict):
+    def __getattr__(self, attr):
+        return self[attr]
+
+    def __setattr__(self, attr, value):
+        self[attr] = value
