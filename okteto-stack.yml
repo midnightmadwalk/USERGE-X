@@ -1,0 +1,20 @@
+name: userge-x
+services:
+  userge-x:
+    image: 'okteto.dev/userge_x:latest'
+    build: .
+    replicas: 1
+    ports:
+      - 8080
+    resources:
+      cpu: 2
+      memory: 3Gi
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - OWNER_ID=${OWNER_ID}
+      - LOG_CHANNEL_ID=${LOG_CHANNEL_ID}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - API_HASH=${API_HASH}
+      - API_ID=${API_ID}
+      - HU_STRING_SESSION=${HU_STRING_SESSION}
+      - environment=development
